@@ -2,7 +2,7 @@
 
 **Live:** [jruva.in](https://www.jruva.in) &nbsp;|&nbsp; **Retrieval benchmark:** [jruva-retrieval-eval](https://github.com/jasirjru/jruva-retrieval-eval)
 
-> The free public demo runs on a 512 MB server: document uploads are off and search uses BM25 keyword retrieval there. The full pipeline below runs locally or on a larger instance.
+> The free public demo runs on a 512 MB server with document uploads off. Search there is hybrid (BGE-small query embeddings, Qdrant Cloud vectors and BM25, merged with weighted RRF) over the built-in knowledge base. If the process goes above 380 MB, a memory guard switches search to BM25 only. The optional reranker is off there.
 
 Jruva is a public-beta AI assistant. You upload a document, ask a question, and it finds the most relevant passages and streams back an answer grounded in them (retrieval-augmented generation, RAG). It keeps answering when an LLM provider fails, and it can search the web or calculate when a question needs it.
 
@@ -68,7 +68,7 @@ A 100-question development set over 50 passages (90 answerable, scored; 10 unans
 Honest notes:
 - Equal-weight hybrid did not beat dense-only. The production weighted fusion scores slightly higher (0.919 vs 0.910 MRR), but its weights were tuned on this same set, so I treat it as a tie. BM25 is kept for exact terms (codes, names, IDs, transliterated text) and as the fallback when local embeddings are disabled. The reranker result comes from a single development run; it is not part of the reproducible benchmark (where the reranker ran as a passthrough) and it is off in production.
 - The question set is small, hand-built and was also used while tuning, so it is a development set, not a held-out test set. Refusal on the 10 unanswerable questions is not scored yet.
-- On the free 512 MB Render instance, local embeddings are off by default to stay within memory, and search falls back to BM25.
+- On the free 512 MB Render instance, search is hybrid, and a memory guard (`MAX_PROCESS_RSS_MB`, 380 MB) switches to BM25 only when memory runs low.
 
 ## Tech stack
 

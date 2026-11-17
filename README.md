@@ -59,13 +59,14 @@ A 100-question development set over 50 passages (90 answerable, scored; 10 unans
 
 | Pipeline | Hit@1 | Hit@5 | MRR |
 |---|---|---|---|
-| Dense only (bge-small) | 83-84% | 100% | 0.91 |
-| BM25 only | 74% | 90% | 0.81 |
-| Hybrid (RRF) | 84% | 97% | 0.90 |
-| Hybrid + reranker (one development run, reranker enabled) | 89% | 98% | 0.93 |
+| Dense only (bge-small) | 83.3% | 100% | 0.910 |
+| BM25 only | 74.4% | 90.0% | 0.810 |
+| Hybrid, equal-weight RRF (k=60) | 84.4% | 96.7% | 0.900 |
+| Hybrid, production weighted RRF (k=20, BM25 weight 0.7) | 86.7% | 98.9% | 0.919 |
+| Hybrid + reranker (one older development run, reranker enabled) | 89% | 98% | 0.93 |
 
 Honest notes:
-- On this set, hybrid RRF did not beat dense-only on MRR. BM25 is kept for exact terms (codes, names, IDs, transliterated text) and as the fallback when local embeddings are disabled. The reranker result comes from a single development run; it is not part of the reproducible benchmark (where the reranker ran as a passthrough) and it is off in production.
+- Equal-weight hybrid did not beat dense-only. The production weighted fusion scores slightly higher (0.919 vs 0.910 MRR), but its weights were tuned on this same set, so I treat it as a tie. BM25 is kept for exact terms (codes, names, IDs, transliterated text) and as the fallback when local embeddings are disabled. The reranker result comes from a single development run; it is not part of the reproducible benchmark (where the reranker ran as a passthrough) and it is off in production.
 - The question set is small, hand-built and was also used while tuning, so it is a development set, not a held-out test set. Refusal on the 10 unanswerable questions is not scored yet.
 - On the free 512 MB Render instance, local embeddings are off by default to stay within memory, and search falls back to BM25.
 

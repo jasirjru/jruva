@@ -394,6 +394,32 @@ def run_truth_benchmarks():
 
     res_100_hybrid = evaluate_retrieval_runs("Hybrid RRF (k=60)", run_hybrid_100, QUESTIONS_100)
 
+    # Pipeline C2: production fusion, same formula as QdrantVectorStore.search_hybrid
+    # (k=20, dense weight 1.0, BM25 weight 0.7, a missing stream adds nothing).
+    # Note: these weights were tuned on this same 100-question set, so this is a
+    # development-set number, not a held-out one.
+    def run_hybrid_prod_100(q: str) -> list[str]:
+        dense = store_100.search_dense(col_100, q, limit=15)
+        d_ranks = {r["id"]: idx for idx, r in enumerate(dense)}
+        toks = tokenize(q) or [w.lower() for w in q.split() if len(w) > 1]
+        scores = bm25_100.score(toks)
+        ranked = [(i, sc) for i, sc in sorted(enumerate(scores), key=lambda x: x[1], reverse=True)[:15] if sc > 0]
+        b_ranks = {PASSAGES_100[doc_idx]["id"]: rank for rank, (doc_idx, _) in enumerate(ranked)}
+        fused = []
+        for cid in set(d_ranks) | set(b_ranks):
+            s = 0.0
+            if cid in d_ranks:
+                s += 1.0 / (20 + d_ranks[cid] + 1)
+            if cid in b_ranks:
+                s += 0.7 / (20 + b_ranks[cid] + 1)
+            fused.append((cid, s))
+        fused.sort(key=lambda x: x[1], reverse=True)
+        return [cid for cid, _ in fused[:15]]
+
+    res_100_hybrid_prod = evaluate_retrieval_runs(
+        "Hybrid weighted RRF (production: k=20, 1.0/0.7)", run_hybrid_prod_100, QUESTIONS_100
+    )
+
     # Pipeline D (Historical Replay: Warm Cache + Degraded Passthrough)
     degraded_reranker = NeuralReranker()
     degraded_reranker.is_available = False
@@ -422,6 +448,7 @@ def run_truth_benchmarks():
         "pipeline_dense": res_100_dense,
         "pipeline_bm25": res_100_bm25,
         "pipeline_hybrid": res_100_hybrid,
+        "pipeline_hybrid_production": res_100_hybrid_prod,
         "pipeline_degraded_replay": res_100_degraded,
         "timing_breakdown_ms": timing_100,
     }

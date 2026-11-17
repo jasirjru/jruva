@@ -1,0 +1,232 @@
+{
+  "benchmark_timestamp": "2026-11-17 15:20:49 UTC",
+  "investigation_summary": {
+    "root_cause_0_36ms_latency": "The 0.36ms latency reported in historical ablation runs was an artifact of two conditions: (1) QueryEmbeddingCache had already cached query embeddings during preceding Pipeline A execution, reducing 5.57ms FastEmbed ONNX embedding inference to a ~0.001ms in-memory dictionary lookup. (2) LOW_MEMORY_RAG_MODE=True and ENABLE_FLASHRANK=False caused NeuralReranker to operate in degraded passthrough mode ('return candidates[:limit]'), which bypassed cross-encoder inference entirely. Thus, 0.36ms measured only cached in-memory Qdrant + BM25 + slice passthrough, NOT neural retrieval.",
+    "hit_at_1_discrepancy_explanation": "The 93.33% Hit@1 on the 30-query dataset (eval_retrieval.py) vs 85.56% Hit@1 on the 100-query hardened dataset (eval_rag_ablations.py) is due to dataset construction: the 30-query corpus consists of exact phrasing and small target documents, whereas the 100-query corpus includes challenging subsets: terminology mismatch (80.0% Hit@1), ambiguous queries (30.0% Hit@1), and adversarial distractors.",
+    "historical_88_89_explanation": "The historical 88.89% Hit@1 originated from an early 18-query prototype dataset (16/18 hits), which is mathematically incomparable to both the 30-query and 100-query benchmark sets."
+  },
+  "datasets": {
+    "dataset_30_query": {
+      "passages": 30,
+      "queries": 30,
+      "pipeline_dense": {
+        "pipeline": "Dense Only (BGE-small, cold embedding)",
+        "n_evaluated": 30,
+        "n_unanswerable": 0,
+        "hit_at_1_pct": 96.67,
+        "hit_at_3_pct": 100.0,
+        "hit_at_5_pct": 100.0,
+        "recall_at_1_pct": 96.67,
+        "recall_at_3_pct": 100.0,
+        "recall_at_5_pct": 100.0,
+        "mrr": 0.9833,
+        "ndcg_at_1": 0.9667,
+        "ndcg_at_3": 0.9877,
+        "ndcg_at_5": 0.9877,
+        "latency_ms": {
+          "mean": 4.086,
+          "p50": 3.759,
+          "p90": 4.834,
+          "p95": 5.405,
+          "p99": 8.053,
+          "min": 3.297,
+          "max": 8.053
+        }
+      },
+      "pipeline_bm25": {
+        "pipeline": "BM25 Only (Lexical)",
+        "n_evaluated": 30,
+        "n_unanswerable": 0,
+        "hit_at_1_pct": 90.0,
+        "hit_at_3_pct": 100.0,
+        "hit_at_5_pct": 100.0,
+        "recall_at_1_pct": 90.0,
+        "recall_at_3_pct": 100.0,
+        "recall_at_5_pct": 100.0,
+        "mrr": 0.95,
+        "ndcg_at_1": 0.9,
+        "ndcg_at_3": 0.9631,
+        "ndcg_at_5": 0.9631,
+        "latency_ms": {
+          "mean": 0.024,
+          "p50": 0.021,
+          "p90": 0.03,
+          "p95": 0.035,
+          "p99": 0.065,
+          "min": 0.013,
+          "max": 0.065
+        }
+      },
+      "pipeline_hybrid": {
+        "pipeline": "Hybrid RRF (k=60)",
+        "n_evaluated": 30,
+        "n_unanswerable": 0,
+        "hit_at_1_pct": 93.33,
+        "hit_at_3_pct": 100.0,
+        "hit_at_5_pct": 100.0,
+        "recall_at_1_pct": 93.33,
+        "recall_at_3_pct": 100.0,
+        "recall_at_5_pct": 100.0,
+        "mrr": 0.9667,
+        "ndcg_at_1": 0.9333,
+        "ndcg_at_3": 0.9754,
+        "ndcg_at_5": 0.9754,
+        "latency_ms": {
+          "mean": 0.356,
+          "p50": 0.35,
+          "p90": 0.377,
+          "p95": 0.403,
+          "p99": 0.413,
+          "min": 0.332,
+          "max": 0.413
+        }
+      },
+      "timing_breakdown_ms": {
+        "cold_query_embedding_onnx_ms": 3.235,
+        "warm_query_embedding_cache_ms": 0.005,
+        "qdrant_vector_search_ms": 0.385,
+        "bm25_lexical_scoring_ms": 0.046,
+        "rrf_fusion_ms": 0.014,
+        "degraded_passthrough_rerank_ms": 0.001,
+        "real_flashrank_tinybert_rerank_ms": "disabled_in_low_memory",
+        "composite_cold_neural_pipeline_ms": 3.68,
+        "composite_warm_cached_degraded_pipeline_ms": 0.451
+      }
+    },
+    "dataset_100_hardened": {
+      "passages": 50,
+      "queries": 100,
+      "pipeline_dense": {
+        "pipeline": "Dense Only (BGE-small, cold embedding)",
+        "n_evaluated": 90,
+        "n_unanswerable": 10,
+        "hit_at_1_pct": 83.33,
+        "hit_at_3_pct": 98.89,
+        "hit_at_5_pct": 100.0,
+        "recall_at_1_pct": 83.33,
+        "recall_at_3_pct": 98.89,
+        "recall_at_5_pct": 100.0,
+        "mrr": 0.9102,
+        "ndcg_at_1": 0.8333,
+        "ndcg_at_3": 0.9286,
+        "ndcg_at_5": 0.9334,
+        "latency_ms": {
+          "mean": 3.581,
+          "p50": 3.463,
+          "p90": 4.158,
+          "p95": 4.549,
+          "p99": 5.559,
+          "min": 2.794,
+          "max": 5.559
+        }
+      },
+      "pipeline_bm25": {
+        "pipeline": "BM25 Only (Lexical)",
+        "n_evaluated": 90,
+        "n_unanswerable": 10,
+        "hit_at_1_pct": 74.44,
+        "hit_at_3_pct": 84.44,
+        "hit_at_5_pct": 90.0,
+        "recall_at_1_pct": 74.44,
+        "recall_at_3_pct": 84.44,
+        "recall_at_5_pct": 90.0,
+        "mrr": 0.81,
+        "ndcg_at_1": 0.7444,
+        "ndcg_at_3": 0.8061,
+        "ndcg_at_5": 0.8295,
+        "latency_ms": {
+          "mean": 0.033,
+          "p50": 0.032,
+          "p90": 0.044,
+          "p95": 0.047,
+          "p99": 0.087,
+          "min": 0.01,
+          "max": 0.087
+        }
+      },
+      "pipeline_hybrid": {
+        "pipeline": "Hybrid RRF (k=60)",
+        "n_evaluated": 90,
+        "n_unanswerable": 10,
+        "hit_at_1_pct": 84.44,
+        "hit_at_3_pct": 94.44,
+        "hit_at_5_pct": 96.67,
+        "recall_at_1_pct": 84.44,
+        "recall_at_3_pct": 94.44,
+        "recall_at_5_pct": 96.67,
+        "mrr": 0.8998,
+        "ndcg_at_1": 0.8444,
+        "ndcg_at_3": 0.9046,
+        "ndcg_at_5": 0.9137,
+        "latency_ms": {
+          "mean": 0.469,
+          "p50": 0.51,
+          "p90": 0.53,
+          "p95": 0.539,
+          "p99": 0.618,
+          "min": 0.33,
+          "max": 0.618
+        }
+      },
+      "pipeline_hybrid_production": {
+        "pipeline": "Hybrid weighted RRF (production: k=20, 1.0/0.7)",
+        "n_evaluated": 90,
+        "n_unanswerable": 10,
+        "hit_at_1_pct": 86.67,
+        "hit_at_3_pct": 97.78,
+        "hit_at_5_pct": 98.89,
+        "recall_at_1_pct": 86.67,
+        "recall_at_3_pct": 97.78,
+        "recall_at_5_pct": 98.89,
+        "mrr": 0.9189,
+        "ndcg_at_1": 0.8667,
+        "ndcg_at_3": 0.931,
+        "ndcg_at_5": 0.9352,
+        "latency_ms": {
+          "mean": 0.347,
+          "p50": 0.348,
+          "p90": 0.358,
+          "p95": 0.36,
+          "p99": 0.367,
+          "min": 0.323,
+          "max": 0.367
+        }
+      },
+      "pipeline_degraded_replay": {
+        "pipeline": "Historical Replay (Cached Embed + Degraded Passthrough Reranker)",
+        "n_evaluated": 90,
+        "n_unanswerable": 10,
+        "hit_at_1_pct": 84.44,
+        "hit_at_3_pct": 94.44,
+        "hit_at_5_pct": 96.67,
+        "recall_at_1_pct": 84.44,
+        "recall_at_3_pct": 94.44,
+        "recall_at_5_pct": 96.67,
+        "mrr": 0.8957,
+        "ndcg_at_1": 0.8444,
+        "ndcg_at_3": 0.9046,
+        "ndcg_at_5": 0.9137,
+        "latency_ms": {
+          "mean": 0.351,
+          "p50": 0.35,
+          "p90": 0.36,
+          "p95": 0.366,
+          "p99": 0.389,
+          "min": 0.328,
+          "max": 0.389
+        }
+      },
+      "timing_breakdown_ms": {
+        "cold_query_embedding_onnx_ms": 3.333,
+        "warm_query_embedding_cache_ms": 0.005,
+        "qdrant_vector_search_ms": 0.473,
+        "bm25_lexical_scoring_ms": 0.069,
+        "rrf_fusion_ms": 0.015,
+        "degraded_passthrough_rerank_ms": 0.001,
+        "real_flashrank_tinybert_rerank_ms": "disabled_in_low_memory",
+        "composite_cold_neural_pipeline_ms": 3.89,
+        "composite_warm_cached_degraded_pipeline_ms": 0.563
+      }
+    }
+  }
+}

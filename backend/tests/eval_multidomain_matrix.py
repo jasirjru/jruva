@@ -290,7 +290,7 @@ if __name__ == "__main__":
             for r in item["failure_reasons"]:
                 print(f"   - {r}")
 
-    out_path = Path("docs/launch_72h/EVALUATION_MATRIX_RESULTS.json")
+    out_path = Path("docs/results/evaluation_matrix_results.json")
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
     print(f"\nSaved evaluation evidence to {out_path}")

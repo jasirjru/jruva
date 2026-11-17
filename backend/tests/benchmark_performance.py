@@ -5,7 +5,7 @@ Measures:
 3. Time to First Token (TTFT) and token throughput (tokens/sec).
 4. Subsystem latency breakdown: API routing, Vector/BM25 retrieval, memory access.
 5. Process RSS memory and CPU utilization.
-Outputs structured metrics to docs/validation_report_2026-10-08/performance_benchmark_results.json.
+Outputs structured metrics to docs/results/performance_benchmark_results.json.
 """
 import asyncio
 import json
@@ -227,7 +227,7 @@ async def main():
         "rag_retrieval_subsystem": rag_res,
     }
 
-    out_file = Path("docs/validation_report_2026-10-08/performance_benchmark_results.json")
+    out_file = Path("docs/results/performance_benchmark_results.json")
     out_file.parent.mkdir(parents=True, exist_ok=True)
     out_file.write_text(json.dumps(benchmark_summary, indent=2), encoding="utf-8")
     print("\n" + "=" * 70)

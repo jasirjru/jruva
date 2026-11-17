@@ -1,0 +1,219 @@
+{
+  "timestamp": "2026-09-13 07:57:29",
+  "total_probes": 30,
+  "passed_probes": 30,
+  "accuracy_pct": 100.0,
+  "average_latency_ms": 10.26,
+  "probes": [
+    {
+      "id": "MATH-01-INTEGRAL-POLY",
+      "cat": "Calculus",
+      "passed": true,
+      "latency_ms": 31.583899981342256,
+      "detail": "x**3 + 2*x**2"
+    },
+    {
+      "id": "MATH-02-INTEGRAL-EXP",
+      "cat": "Calculus",
+      "passed": true,
+      "latency_ms": 9.522500011371449,
+      "detail": "exp(2*x)/2"
+    },
+    {
+      "id": "MATH-03-DEFINITE-INTEGRAL",
+      "cat": "Calculus",
+      "passed": true,
+      "latency_ms": 4.3191000004298985,
+      "detail": "9"
+    },
+    {
+      "id": "MATH-04-DERIVATIVE-TRIG",
+      "cat": "Calculus",
+      "passed": true,
+      "latency_ms": 3.109699988272041,
+      "detail": "-sin(x)**2 + cos(x)**2"
+    },
+    {
+      "id": "MATH-05-DERIVATIVE-SECOND",
+      "cat": "Calculus",
+      "passed": true,
+      "latency_ms": 1.4279999886639416,
+      "detail": "-1/x**2"
+    },
+    {
+      "id": "MATH-06-LIMIT-LHOPITAL",
+      "cat": "Calculus",
+      "passed": true,
+      "latency_ms": 1.350800012005493,
+      "detail": "1"
+    },
+    {
+      "id": "MATH-07-LIMIT-POLY",
+      "cat": "Calculus",
+      "passed": true,
+      "latency_ms": 10.388199996668845,
+      "detail": "4"
+    },
+    {
+      "id": "MATH-08-ODE-HARMONIC",
+      "cat": "Calculus",
+      "passed": true,
+      "latency_ms": 21.428100008051842,
+      "detail": "Eq(y(x), C1*sin(3*x) + C2*cos(3*x))"
+    },
+    {
+      "id": "MATH-09-MATRIX-EIGEN",
+      "cat": "Linear Algebra",
+      "passed": true,
+      "latency_ms": 1.3069999986328185,
+      "detail": "{'5': 1, '2': 1}"
+    },
+    {
+      "id": "MATH-10-TAYLOR-SERIES",
+      "cat": "Calculus",
+      "passed": true,
+      "latency_ms": 5.216899997321889,
+      "detail": "1 - x**2/2 + x**4/24 + O(x**5)"
+    },
+    {
+      "id": "CODE-01-AST-LINEAR",
+      "cat": "Coding",
+      "passed": true,
+      "latency_ms": 0.08510000770911574,
+      "detail": "O(N) [Linear Time]"
+    },
+    {
+      "id": "CODE-02-AST-QUADRATIC",
+      "cat": "Coding",
+      "passed": true,
+      "latency_ms": 0.044899992644786835,
+      "detail": "O(N^2) [Quadratic Time]"
+    },
+    {
+      "id": "CODE-03-AST-RECURSION",
+      "cat": "Coding",
+      "passed": true,
+      "latency_ms": 0.07929999264888465,
+      "detail": "Recursive=True"
+    },
+    {
+      "id": "CODE-04-SANDBOX-EXEC",
+      "cat": "Coding",
+      "passed": true,
+      "latency_ms": 1.2565999932121485,
+      "detail": "[0, 1, 4, 9, 16]"
+    },
+    {
+      "id": "CODE-05-SANDBOX-SECURITY",
+      "cat": "Coding",
+      "passed": true,
+      "latency_ms": 0.016999983927235007,
+      "detail": "Security Violation: Restricted token matching '\\bsubprocess\\b' is not allowed in sandbox."
+    },
+    {
+      "id": "CODE-06-SANDBOX-TIMEOUT",
+      "cat": "Coding",
+      "passed": true,
+      "latency_ms": 23.182300006737933,
+      "detail": "TimeoutError: Execution exceeded maximum sandbox limit of 0.2s."
+    },
+    {
+      "id": "CODE-07-BOUNDARY-TESTS",
+      "cat": "Coding",
+      "passed": true,
+      "latency_ms": 0.002400018274784088,
+      "detail": "7 cases synthesized"
+    },
+    {
+      "id": "CODE-08-SYNTAX-TRAP",
+      "cat": "Coding",
+      "passed": true,
+      "latency_ms": 0.0811999780125916,
+      "detail": "Syntax Error on line 1: invalid syntax"
+    },
+    {
+      "id": "CODE-09-INFINITE-LOOP-AST",
+      "cat": "Coding",
+      "passed": true,
+      "latency_ms": 0.05490001058205962,
+      "detail": "Risk=True"
+    },
+    {
+      "id": "CODE-10-QUERY-SOLVER",
+      "cat": "Coding",
+      "passed": true,
+      "latency_ms": 0.14260000898502767,
+      "detail": "O(N) identified from query"
+    },
+    {
+      "id": "MM-01-DOCX-TABLE",
+      "cat": "Document",
+      "passed": true,
+      "latency_ms": 17.36880000680685,
+      "detail": "Extracted 79 chars"
+    },
+    {
+      "id": "MM-02-XLSX-SHEET",
+      "cat": "Document",
+      "passed": true,
+      "latency_ms": 6.745499995304272,
+      "detail": "Extracted 65 chars"
+    },
+    {
+      "id": "MM-03-CSV-MATRIX",
+      "cat": "Document",
+      "passed": true,
+      "latency_ms": 0.6726999999955297,
+      "detail": "Extracted 118 chars"
+    },
+    {
+      "id": "MM-04-LATEX-TEX",
+      "cat": "Document",
+      "passed": true,
+      "latency_ms": 0.26810000417754054,
+      "detail": "Extracted Markdown from TeX"
+    },
+    {
+      "id": "MM-05-PDF-DIGITAL",
+      "cat": "Document",
+      "passed": true,
+      "latency_ms": 78.39919999241829,
+      "detail": "1 pages parsed"
+    },
+    {
+      "id": "MM-06-OPENCV-CLAHE",
+      "cat": "Vision",
+      "passed": true,
+      "latency_ms": 4.110799985937774,
+      "detail": "CLAHE=True"
+    },
+    {
+      "id": "MM-07-DOMAIN-CLASSIFIER",
+      "cat": "Vision",
+      "passed": true,
+      "latency_ms": 1.0194999922532588,
+      "detail": "Type=general_photo"
+    },
+    {
+      "id": "MM-08-SCIENTIFIC-PLOT",
+      "cat": "Visualization",
+      "passed": true,
+      "latency_ms": 84.03369999723509,
+      "detail": "88814 uri chars"
+    },
+    {
+      "id": "MM-09-UNICODE-SPARK",
+      "cat": "Visualization",
+      "passed": true,
+      "latency_ms": 0.01300001167692244,
+      "detail": "[ \u2582\u2584\u2586\u2588] (Min: 5, Max: 25, Last: 25)"
+    },
+    {
+      "id": "MM-10-ADV-OCR-SHIELD",
+      "cat": "Security",
+      "passed": true,
+      "latency_ms": 0.4640999832190573,
+      "detail": "I cannot fulfill this request under university safety policy."
+    }
+  ]
+}

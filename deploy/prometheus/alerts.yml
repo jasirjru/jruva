@@ -1,0 +1,29 @@
+groups:
+  - name: jru_ai_production_alerts
+    rules:
+      - alert: HighErrorRate
+        expr: rate(jru_requests_total{status=~"5.."}[5m]) / rate(jru_requests_total[5m]) > 0.02
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "JRU AI HTTP 5xx error rate > 2%"
+          description: "Production error rate has exceeded 2% over the last 5 minutes."
+
+      - alert: HighLatencyP95
+        expr: histogram_quantile(0.95, sum(rate(jru_request_duration_seconds_bucket[5m])) by (le, endpoint)) > 1.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "JRU AI P95 latency > 1500ms"
+          description: "Endpoint P95 latency has breached the 1.5-second SLO target."
+
+      - alert: PrimaryProviderDegraded
+        expr: jru_provider_health_status == 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Primary provider health check failing"
+          description: "Provider {{ $labels.provider }} is currently marked DEGRADED."

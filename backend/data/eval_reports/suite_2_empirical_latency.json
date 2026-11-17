@@ -1,0 +1,50 @@
+{
+  "suite": "Suite 2: 50-request empirical latency benchmark",
+  "endpoint": "http://127.0.0.1:8001/api/v1/chat",
+  "total_requests": 50,
+  "successful_http_200": 50,
+  "total_wall_clock_time_sec": 69.86,
+  "effective_throughput_req_sec": 0.72,
+  "metrics_ms": {
+    "min": 23.25,
+    "p50_median": 715.94,
+    "mean": 1397.12,
+    "p90": 2826.22,
+    "p95": 4837.08,
+    "p99": 7988.31,
+    "max": 8546.98,
+    "std_dev": 1723.98
+  },
+  "model_breakdown": {
+    "openai/gpt-oss-120b": 49,
+    "jru-intent-v1": 1
+  },
+  "cached_hits": 6,
+  "slow_requests_exceeding_3s_count": 4,
+  "slow_requests": [
+    {
+      "req": 23,
+      "latency_ms": 7406.84,
+      "model": "openai/gpt-oss-120b",
+      "query": "What is an algorithm in computer science?"
+    },
+    {
+      "req": 33,
+      "latency_ms": 3183.74,
+      "model": "openai/gpt-oss-120b",
+      "query": "What is the Pythagorean theorem?"
+    },
+    {
+      "req": 36,
+      "latency_ms": 6189.81,
+      "model": "openai/gpt-oss-120b",
+      "query": "Who developed the Python programming language?"
+    },
+    {
+      "req": 46,
+      "latency_ms": 8546.98,
+      "model": "openai/gpt-oss-120b",
+      "query": "What is binary code?"
+    }
+  ]
+}

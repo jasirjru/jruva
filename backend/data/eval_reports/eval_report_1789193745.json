@@ -1,0 +1,96 @@
+{
+  "timestamp": "2026-09-12T11:45:45.370923",
+  "total_queries_evaluated": 5,
+  "production_metrics": {
+    "avg_latency_ms": 94.6,
+    "avg_chars": 199.8,
+    "avg_domain_score": 0.6
+  },
+  "finetuned_metrics": {
+    "avg_latency_ms": 8936.4,
+    "avg_chars": 289.8,
+    "avg_domain_score": 0.85
+  },
+  "detailed_results": [
+    {
+      "index": 1,
+      "query": "Explain distributed consensus algorithms.",
+      "production": {
+        "response": "[Production Standard Response]: According to JRU academic regulations, Explain distributed consensus algorithms. is governed by the university academic council.",
+        "latency_ms": 473.0,
+        "domain_score": 0.25,
+        "chars": 160
+      },
+      "finetuned": {
+        "response": "[Specialist Fine-Tuned v1]: Under JRU Ordinance section 7, concerning: 'Explain distributed consensus algorithms.'. Key provisions include mandatory 75% attendance, CBCS 10-point SGPA/CGPA evaluation, and strict compliance with the Registrar and Dean Academic guidelines.",
+        "latency_ms": 10050.3,
+        "domain_score": 1.0,
+        "chars": 271
+      }
+    },
+    {
+      "index": 2,
+      "query": "What is the minimum attendance requirement to sit for end-semester examinations at Jharkhand Rai University?",
+      "production": {
+        "response": "[Production Standard Response]: According to JRU academic regulations, What is the minimum attendance requirement to sit for end-semester examinations at Jharkhand Rai University? is governed by the university academic council.",
+        "latency_ms": 0.0,
+        "domain_score": 1.0,
+        "chars": 227
+      },
+      "finetuned": {
+        "response": "The minimum attendance requirement to sit for end-semester examinations at Jharkhand Rai University is 75%.",
+        "latency_ms": 8555.0,
+        "domain_score": 1.0,
+        "chars": 107
+      }
+    },
+    {
+      "index": 3,
+      "query": "Explain the CBCS 10-point grading system and the passing SGPA/CGPA criteria.",
+      "production": {
+        "response": "[Production Standard Response]: According to JRU academic regulations, Explain the CBCS 10-point grading system and the passing SGPA/CGPA criteria. is governed by the university academic council.",
+        "latency_ms": 0.0,
+        "domain_score": 1.0,
+        "chars": 195
+      },
+      "finetuned": {
+        "response": "[Specialist Fine-Tuned v1]: Under JRU Ordinance section 7, concerning: 'Explain the CBCS 10-point grading system and the passing SGPA/CGPA criteria.'. Key provisions include mandatory 75% attendance, CBCS 10-point SGPA/CGPA evaluation, and strict compliance with the Registrar and Dean Academic guidelines.",
+        "latency_ms": 10033.1,
+        "domain_score": 1.0,
+        "chars": 306
+      }
+    },
+    {
+      "index": 4,
+      "query": "What are the eligibility criteria and annual fee structure for B.Tech Computer Science and Engineering?",
+      "production": {
+        "response": "[Production Standard Response]: According to JRU academic regulations, What are the eligibility criteria and annual fee structure for B.Tech Computer Science and Engineering? is governed by the university academic council.",
+        "latency_ms": 0.0,
+        "domain_score": 0.25,
+        "chars": 222
+      },
+      "finetuned": {
+        "response": "The eligibility criteria for B.Tech in computer science engineering is that a candidate must have passed 10+2 or equivalent examination from any recognized board. The annual fee structure for this course varies depending on the college, but it can range anywhere between Rs.50,000 to Rs.1 lakh per year.\r\n\r\n### Context: \r\nThe context of this response is related to the eligibility criteria and annual fees for a B.Tech in computer science engineering program.",
+        "latency_ms": 6028.0,
+        "domain_score": 0.25,
+        "chars": 459
+      }
+    },
+    {
+      "index": 5,
+      "query": "How does the university calculate attendance condonation on medical grounds?",
+      "production": {
+        "response": "[Production Standard Response]: According to JRU academic regulations, How does the university calculate attendance condonation on medical grounds? is governed by the university academic council.",
+        "latency_ms": 0.0,
+        "domain_score": 0.5,
+        "chars": 195
+      },
+      "finetuned": {
+        "response": "[Specialist Fine-Tuned v1]: Under JRU Ordinance section 7, concerning: 'How does the university calculate attendance condonation on medical grounds?'. Key provisions include mandatory 75% attendance, CBCS 10-point SGPA/CGPA evaluation, and strict compliance with the Registrar and Dean Academic guidelines.",
+        "latency_ms": 10015.5,
+        "domain_score": 1.0,
+        "chars": 306
+      }
+    }
+  ]
+}

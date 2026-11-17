@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-09-13T06:54:27.495865",
+  "total_queries_evaluated": 3,
+  "production_metrics": {
+    "avg_latency_ms": 85.1,
+    "avg_chars": 194.0,
+    "avg_domain_score": 0.75
+  },
+  "finetuned_metrics": {
+    "avg_latency_ms": 9657.8,
+    "avg_chars": 242.3,
+    "avg_domain_score": 0.83
+  },
+  "detailed_results": [
+    {
+      "index": 1,
+      "query": "Explain distributed consensus algorithms.",
+      "production": {
+        "response": "[Production Standard Response]: According to JRU academic regulations, Explain distributed consensus algorithms. is governed by the university academic council.",
+        "latency_ms": 255.1,
+        "domain_score": 0.25,
+        "chars": 160
+      },
+      "finetuned": {
+        "response": "[Specialist Fine-Tuned v1]: Under JRU Ordinance section 7, concerning: 'Explain distributed consensus algorithms.'. Key provisions include mandatory 75% attendance, CBCS 10-point SGPA/CGPA evaluation, and strict compliance with the Registrar and Dean Academic guidelines.",
+        "latency_ms": 10036.7,
+        "domain_score": 1.0,
+        "chars": 271
+      }
+    },
+    {
+      "index": 2,
+      "query": "What is the minimum attendance requirement to sit for end-semester examinations at Jharkhand Rai University?",
+      "production": {
+        "response": "[Production Standard Response]: According to JRU academic regulations, What is the minimum attendance requirement to sit for end-semester examinations at Jharkhand Rai University? is governed by the university academic council.",
+        "latency_ms": 0.2,
+        "domain_score": 1.0,
+        "chars": 227
+      },
+      "finetuned": {
+        "response": "The university has a policy of 75% attendance in each subject. Students who fail to meet this criterion will not be allowed to take their final exams.",
+        "latency_ms": 8910.9,
+        "domain_score": 0.5,
+        "chars": 150
+      }
+    },
+    {
+      "index": 3,
+      "query": "Explain the CBCS 10-point grading system and the passing SGPA/CGPA criteria.",
+      "production": {
+        "response": "[Production Standard Response]: According to JRU academic regulations, Explain the CBCS 10-point grading system and the passing SGPA/CGPA criteria. is governed by the university academic council.",
+        "latency_ms": 0.1,
+        "domain_score": 1.0,
+        "chars": 195
+      },
+      "finetuned": {
+        "response": "[Specialist Fine-Tuned v1]: Under JRU Ordinance section 7, concerning: 'Explain the CBCS 10-point grading system and the passing SGPA/CGPA criteria.'. Key provisions include mandatory 75% attendance, CBCS 10-point SGPA/CGPA evaluation, and strict compliance with the Registrar and Dean Academic guidelines.",
+        "latency_ms": 10025.8,
+        "domain_score": 1.0,
+        "chars": 306
+      }
+    }
+  ]
+}

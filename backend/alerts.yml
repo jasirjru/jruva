@@ -1,0 +1,37 @@
+# Prometheus Alerting Rules for JRU AI Chatbot
+# Auto-generated from app.core.alerts.PRODUCTION_ALERTS
+groups:
+  - name: jru_chatbot_alerts
+    rules:
+      - alert: HighErrorRate
+        expr: rate(jru_requests_total{status=~"5.."}[5m]) / rate(jru_requests_total[5m]) > 0.02
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "HTTP 5xx error rate exceeds 2% over 5-minute rolling window."
+          runbook_url: "https://runbooks.internal/jru/high-error-rate"
+      - alert: HighLatencyP95
+        expr: histogram_quantile(0.95, sum(rate(jru_request_duration_seconds_bucket[5m])) by (le, endpoint)) > 1.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "P95 request latency exceeds 1.5s SLO target over 5-minute window."
+          runbook_url: "https://runbooks.internal/jru/high-latency"
+      - alert: PrimaryProviderDegraded
+        expr: jru_provider_health_status == 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Primary image or reasoning provider marked degraded after 3 consecutive failures."
+          runbook_url: "https://runbooks.internal/jru/provider-failover"
+      - alert: CacheHitRateDegraded
+        expr: rate(jru_cache_hits_total[10m]) / (rate(jru_cache_hits_total[10m]) + rate(jru_cache_misses_total[10m])) < 0.10
+        for: 15m
+        labels:
+          severity: info
+        annotations:
+          summary: "Cache hit ratio dropped below 10% on sustained traffic."
+          runbook_url: "https://runbooks.internal/jru/cache-tuning"

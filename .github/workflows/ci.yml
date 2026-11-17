@@ -1,0 +1,151 @@
+name: JRU AI Production CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend-lint-and-migration:
+    name: Backend Ruff Lint & Migration Continuity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Linting & Migration Tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install ruff==0.16.8 alembic "sqlalchemy[asyncio]" greenlet asyncpg pydantic pydantic-settings
+
+      - name: Reject Ruff Regressions Against Reviewed Source Debt
+        run: python scripts/verify_release_lint.py
+
+      - name: Verify Single-Headed Alembic Migration Ancestry
+        run: |
+          export PYTHONPATH=backend
+          python scripts/verify_supabase_readiness.py
+
+  backend-test-and-coverage:
+    name: Backend Pytest & Coverage
+    runs-on: ubuntu-latest
+    needs: [backend-lint-and-migration]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install Backend Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install pytest-asyncio pytest-cov locust prometheus-client reportlab "psycopg[binary]"
+
+      - name: Pre-cache FastEmbed Model for Hermetic Verification
+        run: |
+          mkdir -p scratch/operations-verification/fastembed_cache
+          python -c "from fastembed import TextEmbedding; TextEmbedding(model_name='BAAI/bge-small-en-v1.5', cache_dir='scratch/operations-verification/fastembed_cache')"
+
+      - name: Run Backend Tests with Coverage
+        run: |
+          export PYTHONPATH=backend
+          python -B scripts/verify_operations_security.py --full --coverage --evidence-name ci-backend
+          python -B scripts/verify_operations_security.py --targets backend/tests/test_codex_lease_regressions.py backend/tests/test_codex_transaction_regressions.py backend/tests/test_codex_storage_regressions.py backend/tests/test_p0_operation_closure.py backend/tests/test_p0_quota_ledger.py backend/tests/test_p0_ledger_migrations.py scripts/codex_release_fault_probes.py backend/tests/test_release_assembly_contracts.py --evidence-name ci-p0
+
+  frontend-typecheck-and-build:
+    name: Frontend TypeScript & Turbopack Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        run: npm --prefix frontend ci
+
+      - name: TypeScript Typecheck (Strict AST)
+        run: node frontend/node_modules/typescript/bin/tsc -p frontend/tsconfig.json --noEmit
+
+      - name: Build Next.js Application
+        run: npm --prefix frontend run build
+
+  attachment-memory-budget:
+    name: Attachment Linux 512 MiB Memory Budget
+    runs-on: ubuntu-latest
+    needs: [backend-lint-and-migration]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: Install Existing Backend and Test Dependencies
+        run: pip install -r backend/requirements.txt pytest pytest-asyncio
+      - name: Run Real Attachment Pipeline Under a 512 MiB Cgroup With No Swap
+        run: |
+          sudo systemd-run --wait --pipe --collect \
+            --property=MemoryMax=512M --property=MemorySwapMax=0 \
+            --working-directory="$PWD" \
+            --setenv=PYTHONPATH=backend --setenv=DEBUG=false \
+            --setenv=REQUIRE_MEMORY_CGROUP=1 \
+            --setenv=RELEASE_COMMIT_SHA=$(git rev-parse HEAD) \
+            --setenv=OPENBLAS_NUM_THREADS=1 --setenv=OMP_NUM_THREADS=1 \
+            "$(which python)" -m pytest backend/tests/test_attachment_memory_512mb.py -q
+      - name: Save Exact-Candidate Resource Evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: attachment-linux-memory
+          path: scratch/attachment-qa/linux-memory.json
+          if-no-files-found: warn
+
+  security-audit:
+    name: Dependency Vulnerability Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Audit Backend Dependencies (Strict Release Gate)
+        run: |
+          pip install pip-audit
+          pip-audit -r backend/requirements.txt
+
+      - name: Audit Production Frontend Dependencies (Strict Release Gate)
+        run: npm --prefix frontend audit --omit=dev --audit-level=high
+
+      - name: Advisory Tooling & DevDependencies Audit
+        continue-on-error: true
+        run: npm --prefix frontend audit --audit-level=high

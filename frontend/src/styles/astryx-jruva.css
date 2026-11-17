@@ -1,0 +1,60 @@
+/*
+ * Jruva skin for the Astryx "chocolate" theme.
+ *
+ * Astryx tokens are mapped onto Jruva's own CSS variables, so light/dark
+ * switching keeps following html[data-theme] exactly like the rest of Jruva.
+ * Active on and around elements marked [data-jruva-skin]; without it, plain
+ * Astryx chocolate styling applies (used by /astryx-preview to compare).
+ *
+ * Same layer and same @scope as the theme so source order decides the cascade.
+ */
+@layer reset, astryx-base, astryx-theme;
+
+@layer astryx-theme {
+  @scope ([data-astryx-theme="chocolate"]) to ([data-astryx-theme]) {
+    /* The theme root (wrapper div and <html>) resolves inherited values such as
+       font-family and color, so it must carry the skin too. */
+    :scope:has([data-jruva-skin]),
+    :scope[data-jruva-skin],
+    :scope [data-jruva-skin] {
+      --font-family-body: var(--font-sans);
+      --font-family-heading: var(--font-serif);
+      --font-family-code: var(--font-mono);
+
+      --color-accent: var(--accent-fill);
+      --color-accent-muted: color-mix(in srgb, var(--accent) 12%, transparent);
+      --color-text-accent: var(--accent-hover);
+      --color-icon-accent: var(--accent);
+      --color-on-accent: var(--btn-primary-text);
+
+      --color-background-body: var(--bg-canvas);
+      --color-background-surface: var(--bg-card);
+      --color-background-popover: var(--bg-card);
+      --color-background-muted: var(--bg-surface);
+      --color-background-card: var(--bg-surface);
+      --color-background-inverted: var(--text-primary);
+
+      --color-text-primary: var(--text-primary);
+      --color-text-secondary: var(--text-tertiary);
+      --color-text-disabled: color-mix(in srgb, var(--text-tertiary) 55%, transparent);
+      --color-text-error: var(--error-text);
+      /* Warm brick red instead of chocolate's pure #FD0000 for destructive actions */
+      --color-error: light-dark(#A83220, #E5675C);
+      --color-on-error: light-dark(#FFFFFF, #1A1412);
+      --color-error-muted: color-mix(in srgb, var(--color-error) 12%, transparent);
+      --color-icon-primary: var(--text-primary);
+      --color-icon-secondary: var(--text-tertiary);
+
+      --color-neutral: color-mix(in srgb, var(--text-primary) 6%, transparent);
+      --color-overlay-hover: color-mix(in srgb, var(--text-primary) 6%, transparent);
+      --color-overlay-pressed: color-mix(in srgb, var(--text-primary) 11%, transparent);
+
+      --color-border: var(--border-card);
+      --color-border-emphasized: color-mix(in srgb, var(--text-tertiary) 45%, transparent);
+
+      --radius-inner: var(--radius-xs);
+      --radius-element: var(--radius-sm);
+      --radius-container: var(--radius-md);
+    }
+  }
+}

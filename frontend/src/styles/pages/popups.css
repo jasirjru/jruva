@@ -1,0 +1,651 @@
+/*
+ * Stage 5 pop-ups: memory, sign in and the command palette.
+ *
+ * Each pop-up is an Astryx <Dialog> (native <dialog>, so focus trap, Escape,
+ * focus return and aria-modal come from the browser). These rules are
+ * unlayered, so they win over Astryx's layered styles and over the old
+ * .memory-*, .auth-* and .cmd-* rules in globals.css, which no longer match.
+ * Colours come only from Jruva variables.
+ */
+
+/* ---------- Shared dialog surface ---------- */
+
+.pop-dialog {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  font-family: var(--font-sans);
+  overflow: hidden;
+}
+
+.pop-dialog::backdrop {
+  background: color-mix(in srgb, var(--text-primary) 32%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+[data-theme="dark"] .pop-dialog::backdrop {
+  background: color-mix(in srgb, var(--bg-canvas) 78%, transparent);
+}
+
+/* Flex column so the header and footer stay put and only the body scrolls. */
+.pop-shell {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+  min-height: 0;
+}
+
+.pop-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px 20px 14px;
+}
+
+.pop-head-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.pop-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+/* The title takes focus on open so the first Escape closes the dialog; it is not a control, so no ring. */
+.pop-dialog h2.pop-title:focus-visible,
+.pop-dialog h2.pop-title:focus {
+  outline: none;
+}
+
+.pop-subtitle {
+  margin: 4px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text-tertiary);
+}
+
+.pop-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 20px 20px;
+}
+
+.pop-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border-hairline);
+  background: var(--bg-canvas);
+}
+
+.pop-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.pop-icon-btn:hover {
+  background: var(--bg-pill-hover);
+  color: var(--text-primary);
+}
+
+.pop-icon-btn:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.pop-dialog :is(button, input, select, a, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.pop-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border: 1px solid var(--error-border);
+  border-radius: var(--radius-sm);
+  background: var(--error-bg);
+  color: var(--error-text);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.pop-error svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.pop-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px 0;
+  color: var(--text-tertiary);
+  font-size: 0.875rem;
+}
+
+.pop-spin {
+  animation: pop-spin 0.9s linear infinite;
+}
+
+@keyframes pop-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Memory ---------- */
+
+.pop-mem-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md);
+  background: var(--bg-canvas);
+}
+
+.pop-mem-form-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.pop-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.pop-field-grow {
+  flex: 1;
+}
+
+.pop-hint {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.pop-examples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.pop-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 4px 12px;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-pill);
+  background: var(--bg-pill);
+  color: var(--text-secondary);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.pop-chip:hover {
+  background: var(--bg-pill-hover);
+  color: var(--text-primary);
+}
+
+.pop-chip[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg-card));
+  color: var(--text-primary);
+}
+
+.pop-chip-count {
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.pop-mem-filters {
+  display: flex;
+  gap: 6px;
+  margin: 18px 0 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.pop-mem-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.pop-mem-filters .pop-chip {
+  flex-shrink: 0;
+}
+
+.pop-mem-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-md);
+}
+
+.pop-mem-list-spaced {
+  margin-top: 18px;
+}
+
+.pop-mem-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 8px 12px 14px;
+}
+
+.pop-mem-item + .pop-mem-item {
+  border-top: 1px solid var(--border-hairline);
+}
+
+.pop-mem-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+.pop-mem-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.pop-mem-fact {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.pop-mem-meta {
+  margin: 2px 0 0;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.pop-mem-item .pop-error {
+  margin-top: 8px;
+}
+
+.pop-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.pop-empty-icon {
+  margin-bottom: 6px;
+  color: var(--text-tertiary);
+}
+
+.pop-empty-title {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.pop-empty-text {
+  margin: 0;
+  max-width: 36ch;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text-tertiary);
+}
+
+.pop-empty .pop-actions {
+  margin-top: 12px;
+}
+
+.pop-foot-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+}
+
+.pop-foot-note svg {
+  flex-shrink: 0;
+}
+
+.pop-text-btn {
+  min-height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--error-text);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pop-text-btn:hover {
+  background: var(--error-bg);
+}
+
+/* ---------- Sign in ---------- */
+
+.pop-auth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 24px 24px;
+  text-align: center;
+}
+
+.pop-auth-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.pop-auth .pop-title {
+  margin-top: 16px;
+}
+
+.pop-auth .pop-subtitle {
+  max-width: 30ch;
+}
+
+.pop-auth-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 24px;
+}
+
+.pop-auth-google[hidden] {
+  display: none;
+}
+
+.pop-auth .pop-error {
+  width: 100%;
+  text-align: left;
+}
+
+.pop-auth .pop-status {
+  min-height: 44px;
+  margin-top: 24px;
+  padding: 0;
+}
+
+.pop-auth-retry {
+  margin-top: 12px;
+}
+
+.pop-auth-foot {
+  justify-content: center;
+}
+
+/* ---------- Command palette ---------- */
+
+/* A `position` on Dialog sets the unset inline offsets to auto, which pins the
+   surface to the left edge; re-centre it horizontally. */
+.pop-dialog.pop-pal {
+  inset-inline: 0;
+  margin-inline: auto;
+}
+
+.pop-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.pop-pal-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px 0 16px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+
+.pop-pal-search > svg {
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+}
+
+.pop-pal-input {
+  flex: 1;
+  min-width: 0;
+  height: 54px;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.pop-pal-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.pop-dialog .pop-pal-input:focus-visible {
+  outline: none;
+}
+
+.pop-pal-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px 8px 10px;
+}
+
+.pop-pal-group-label {
+  padding: 10px 10px 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+.pop-pal-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  scroll-margin: 8px;
+}
+
+.pop-pal-item[aria-selected="true"] {
+  background: color-mix(in srgb, var(--accent) 11%, transparent);
+}
+
+.pop-pal-item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-xs);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+}
+
+.pop-pal-item[aria-selected="true"] .pop-pal-item-icon {
+  background: var(--bg-card);
+  color: var(--accent);
+}
+
+.pop-pal-item-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pop-pal-item-label,
+.pop-pal-item-sub {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pop-pal-item-label {
+  font-size: 0.9375rem;
+}
+
+.pop-pal-item-sub {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+}
+
+.pop-pal-empty {
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+}
+
+.pop-pal .pop-error {
+  margin: 8px 8px 0;
+}
+
+.pop-pal-foot {
+  justify-content: flex-start;
+  gap: 16px;
+  padding: 10px 16px;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.pop-pal-foot span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pop-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-xs);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+/* ---------- Phone and touch ---------- */
+
+@media (max-width: 520px) {
+  .pop-head {
+    padding: 16px 16px 12px;
+  }
+
+  .pop-body {
+    padding: 4px 16px 16px;
+  }
+
+  .pop-foot {
+    padding: 10px 16px;
+  }
+
+  .pop-mem-form-row {
+    flex-wrap: wrap;
+  }
+
+  .pop-mem-form-row .pop-field-grow {
+    flex-basis: 100%;
+  }
+
+  .pop-mem-form-row .pop-field:not(.pop-field-grow) {
+    flex: 1;
+  }
+
+  .pop-pal-foot {
+    display: none;
+  }
+}
+
+@media (hover: none) {
+  .pop-icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .pop-chip,
+  .pop-text-btn {
+    min-height: 40px;
+  }
+
+  .pop-pal-item {
+    min-height: 48px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop-spin {
+    animation-duration: 2.4s;
+  }
+
+  .pop-dialog::backdrop {
+    backdrop-filter: none;
+  }
+
+  .pop-icon-btn,
+  .pop-chip {
+    transition: none;
+  }
+}

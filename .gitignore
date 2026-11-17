@@ -1,0 +1,98 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.venv
+venv/
+ENV/
+uv.lock
+
+# Node.js / Next.js
+node_modules/
+.pnp
+.pnp.js
+coverage
+.next/
+out/
+build
+*.tsbuildinfo
+next-env.d.ts
+
+# Environments & Secrets
+.env
+.env.*
+*.env
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env*.example
+*.pem
+*.key
+
+# IDEs & System
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# Databases & Vector Stores
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite3
+data/qdrant_db/
+backend/data/qdrant_db/
+scratch/
+cloudflared.exe
+
+# Model Weights & Large Artifacts
+backend/data/models/*
+!backend/data/models/Modelfile*
+*.safetensors
+*.onnx
+*.bin
+*.pt
+*.pth
+training_venv/
+backend/data/training/
+
+# Generated Test Assets & Ephemeral Data
+backend/app/static/generated/
+backend/app/data/
+graphify-out/
+
+# Testing & tool artifacts
+.playwright-mcp/
+
+
+# Retrieval models fetched at build time (scripts/prefetch_models.py)
+backend/.model_cache/

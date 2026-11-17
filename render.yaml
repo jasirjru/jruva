@@ -1,0 +1,51 @@
+services:
+  - type: web
+    name: jru-chatbot-backend
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r backend/requirements.txt && MODEL_CACHE_DIR=backend/.model_cache python scripts/prefetch_models.py
+    startCommand: python run.py
+    healthCheckPath: /api/v1/health
+    autoDeploy: false
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: MAINTENANCE_MODE
+        value: "false"
+      - key: DATABASE_BACKEND
+        value: postgres
+      - key: STORAGE_BACKEND
+        value: local
+      - key: ENABLE_DOCUMENT_UPLOADS
+        value: "false"
+      - key: ENABLE_DAILY_PROMPT_LIMIT
+        value: "false"
+      - key: ENABLE_VOICE_TRANSCRIPTION
+        value: "true"
+      - key: MODEL_CACHE_DIR
+        value: backend/.model_cache
+      - key: DAILY_GUEST_SEARCH_POOL
+        value: "20"
+      - key: JINA_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: ALLOWED_ORIGINS
+        value: https://jruva.in,https://www.jruva.in,https://jru-chatbot.vercel.app,http://localhost:3000
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: openai/gpt-oss-120b
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.6-flash
+      - key: QDRANT_URL
+        value: https://your-cluster-id.region.aws.cloud.qdrant.io:6333
+      - key: QDRANT_API_KEY
+        sync: false
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "60"

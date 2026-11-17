@@ -1,0 +1,184 @@
+{
+  "timestamp": "2026-09-14 16:15:03",
+  "total_probes": 25,
+  "passed_probes": 25,
+  "accuracy_pct": 100.0,
+  "average_latency_ms": 1.84,
+  "probes": [
+    {
+      "id": "DP-01-COIN-CHANGE",
+      "cat": "Algorithms",
+      "passed": true,
+      "latency_ms": 2.085799991618842,
+      "detail": "3/3 passed"
+    },
+    {
+      "id": "DP-02-01-KNAPSACK",
+      "cat": "Algorithms",
+      "passed": true,
+      "latency_ms": 1.0648999596014619,
+      "detail": "2/2 passed"
+    },
+    {
+      "id": "DP-03-LIS-PATIENT",
+      "cat": "Algorithms",
+      "passed": true,
+      "latency_ms": 0.7922000368125737,
+      "detail": "2/2 passed"
+    },
+    {
+      "id": "DP-04-KADANE-SUBARRAY",
+      "cat": "Algorithms",
+      "passed": true,
+      "latency_ms": 0.7393000414595008,
+      "detail": "2/2 passed"
+    },
+    {
+      "id": "DP-05-EDIT-DISTANCE",
+      "cat": "Algorithms",
+      "passed": true,
+      "latency_ms": 1.1629000073298812,
+      "detail": "2/2 passed"
+    },
+    {
+      "id": "DS-01-DISJOINT-SET-UNION",
+      "cat": "Data Structures",
+      "passed": true,
+      "latency_ms": 0.7922999793663621,
+      "detail": "Path compression & rank verified"
+    },
+    {
+      "id": "DS-02-PREFIX-TRIE",
+      "cat": "Data Structures",
+      "passed": true,
+      "latency_ms": 0.8311000419780612,
+      "detail": "Prefix insertion & lookup verified"
+    },
+    {
+      "id": "DS-03-MONOTONIC-STACK",
+      "cat": "Data Structures",
+      "passed": true,
+      "latency_ms": 0.9465999901294708,
+      "detail": "Next greater span verified"
+    },
+    {
+      "id": "DS-04-LRU-CACHE",
+      "cat": "Data Structures",
+      "passed": true,
+      "latency_ms": 0.8548999903723598,
+      "detail": "O(1) access & eviction verified"
+    },
+    {
+      "id": "DS-05-ROTATED-BINSEARCH",
+      "cat": "Data Structures",
+      "passed": true,
+      "latency_ms": 1.0825999779626727,
+      "detail": "O(log N) rotated search verified"
+    },
+    {
+      "id": "GRAPH-01-BFS-SHORTEST",
+      "cat": "Graph Theory",
+      "passed": true,
+      "latency_ms": 0.8778999908827245,
+      "detail": "Shortest unweighted path verified"
+    },
+    {
+      "id": "GRAPH-02-KAHN-TOPO",
+      "cat": "Graph Theory",
+      "passed": true,
+      "latency_ms": 0.8999999845400453,
+      "detail": "DAG linear order & cycle detection verified"
+    },
+    {
+      "id": "GRAPH-03-UNDIRECTED-CYCLE",
+      "cat": "Graph Theory",
+      "passed": true,
+      "latency_ms": 0.8607999770902097,
+      "detail": "DFS back-edge detection verified"
+    },
+    {
+      "id": "GRAPH-04-CONNECTED-COMPONENTS",
+      "cat": "Graph Theory",
+      "passed": true,
+      "latency_ms": 1.6489000408910215,
+      "detail": "DSU component reduction verified"
+    },
+    {
+      "id": "GRAPH-05-2D-GRID-ISLANDS",
+      "cat": "Graph Theory",
+      "passed": true,
+      "latency_ms": 1.4261000324040651,
+      "detail": "Flood-fill component traversal verified"
+    },
+    {
+      "id": "AST-01-COMPLEXITY-DEPTH",
+      "cat": "AST Static Analysis",
+      "passed": true,
+      "latency_ms": 0.1612999476492405,
+      "detail": "O(N) & O(N^2) correctly separated"
+    },
+    {
+      "id": "AST-02-MUTABLE-DEFAULTS",
+      "cat": "AST Static Analysis",
+      "passed": true,
+      "latency_ms": 0.0703000114299357,
+      "detail": "Mutable default trapped"
+    },
+    {
+      "id": "AST-03-QUAD-CONCAT-SMELL",
+      "cat": "AST Static Analysis",
+      "passed": true,
+      "latency_ms": 0.0858000130392611,
+      "detail": "Quadratic accumulation in loop trapped"
+    },
+    {
+      "id": "AST-04-BARE-EXCEPT-SMELL",
+      "cat": "AST Static Analysis",
+      "passed": true,
+      "latency_ms": 0.3801000420935452,
+      "detail": "Bare except clause trapped"
+    },
+    {
+      "id": "AST-05-PATTERN-CLASSIFIER",
+      "cat": "AST Static Analysis",
+      "passed": true,
+      "latency_ms": 0.001300009898841381,
+      "detail": "Two Pointers pattern matched"
+    },
+    {
+      "id": "SEC-01-SANDBOX-EXECUTION",
+      "cat": "Security Sandbox",
+      "passed": true,
+      "latency_ms": 0.3375000087544322,
+      "detail": "Clean execution stdout verified"
+    },
+    {
+      "id": "SEC-02-SUBPROCESS-BLOCK",
+      "cat": "Security Sandbox",
+      "passed": true,
+      "latency_ms": 0.008200004231184721,
+      "detail": "Subprocess injection neutralized"
+    },
+    {
+      "id": "SEC-03-FILESYSTEM-BLOCK",
+      "cat": "Security Sandbox",
+      "passed": true,
+      "latency_ms": 0.005999987479299307,
+      "detail": "Filesystem open call blocked"
+    },
+    {
+      "id": "SEC-04-TIMEOUT-GUARD",
+      "cat": "Security Sandbox",
+      "passed": true,
+      "latency_ms": 28.822599968407303,
+      "detail": "Instruction tracer terminated loop"
+    },
+    {
+      "id": "SEC-05-TEMPLATE-RETRIEVAL",
+      "cat": "Security Sandbox",
+      "passed": true,
+      "latency_ms": 0.009899958968162537,
+      "detail": "Dijkstra template verified"
+    }
+  ]
+}

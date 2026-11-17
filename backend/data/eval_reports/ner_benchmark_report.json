@@ -1,0 +1,36 @@
+{
+  "timestamp": "2026-09-14T10:44:00Z",
+  "total_samples": 500,
+  "micro_f1": 95.62,
+  "macro_f1": 96.84,
+  "micro_precision": 95.86,
+  "micro_recall": 95.38,
+  "latency_ms_per_query": 0.044,
+  "slot_metrics": {
+    "program_name": {
+      "precision": 90.37,
+      "recall": 90.59,
+      "f1": 90.48
+    },
+    "semester_num": {
+      "precision": 99.51,
+      "recall": 100.0,
+      "f1": 99.75
+    },
+    "fee_category": {
+      "precision": 95.26,
+      "recall": 100.0,
+      "f1": 97.57
+    },
+    "statutory_topic": {
+      "precision": 100.0,
+      "recall": 93.06,
+      "f1": 96.41
+    },
+    "registration_id": {
+      "precision": 100.0,
+      "recall": 100.0,
+      "f1": 100.0
+    }
+  }
+}

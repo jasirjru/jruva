@@ -1,10 +1,8 @@
-# JRUVA — Reproducible Retrieval Benchmarks & Baseline Truth Audit
+# Jruva: Reproducible Retrieval Benchmarks
 
-**Audit Timestamp:** October 9, 2026 (Autonomous AI Product Excellence Mission)  
-**Evaluator:** Principal Applied AI/ML & RAG Evaluation Lead  
-**Repository:** `jasirjru/jru-chatbot`  
-**Worktree:** `C:\AI_ML_Workspace\Projects\chatbot-antigravity-release-shift`  
-**Execution Environment:** Windows, Python 3.12/3.14 venv, FastEmbed ONNX runtime, Qdrant in-memory engine, Okapi BM25  
+Run on 9 Oct 2026 (Windows, Python 3.12 venv, FastEmbed ONNX, Qdrant in-memory, Okapi BM25).
+Script: `scripts/benchmark_retrieval_truth.py`. The question sets are small and hand-built development sets,
+not held-out test sets, so treat the numbers as a sanity check of the pipeline, not a general accuracy claim.
 
 ---
 
